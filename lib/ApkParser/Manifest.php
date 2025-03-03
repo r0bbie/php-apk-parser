@@ -1167,7 +1167,7 @@ class Manifest extends Xml
      * @return mixed
      * @throws \Exception
      */
-    private function getAttribute($attributeName)
+    private function getAttribute($attributeName, bool $optional = false)
     {
         if ($this->attrs === null) {
             $xmlObj = $this->getXmlObject();
@@ -1176,6 +1176,9 @@ class Manifest extends Xml
         }
 
         if (!isset($this->attrs[$attributeName])) {
+            if ($optional) {
+                return null;
+            }
             throw new \Exception("Attribute not found : " . $attributeName);
         }
 
@@ -1208,7 +1211,7 @@ class Manifest extends Xml
      */
     public function isDebuggable()
     {
-        return (bool)$this->getAttribute('debuggable');
+        return (bool)($this->getAttribute('debuggable', true) ?? false);
     }
 
     /**
